@@ -1,0 +1,34 @@
+services:
+  aura-server:
+    image: ghcr.io/gcu-ai-computer-aura-project/aura-server:latest
+    container_name: aura-server
+    restart: unless-stopped
+    env_file:
+      - .env
+    expose:
+      - "8080"
+    volumes:
+      - ./models:/app/models
+      - ./firebase:/app/firebase
+    networks:
+      - aura-network
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: aura-nginx
+    restart: unless-stopped
+    depends_on:
+      - aura-server
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    networks:
+      - aura-network
+
+networks:
+  aura-network:
+    driver: bridge
