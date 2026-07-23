@@ -37,8 +37,8 @@ docker compose -f "$COMPOSE_FILE" config --quiet
 docker compose -f "$COMPOSE_FILE" pull
 docker compose -f "$COMPOSE_FILE" up -d --remove-orphans
 docker compose -f "$COMPOSE_FILE" ps
-docker compose -f "$COMPOSE_FILE" exec -T "$NGINX_CONTAINER" nginx -t
-docker compose -f "$COMPOSE_FILE" exec -T "$NGINX_CONTAINER" nginx -s reload
+docker exec "$NGINX_CONTAINER" nginx -t
+docker exec "$NGINX_CONTAINER" nginx -s reload
 
 for attempt in $(seq 1 "$HEALTH_MAX_ATTEMPTS"); do
 	if curl -fsS "$HEALTH_URL"; then
