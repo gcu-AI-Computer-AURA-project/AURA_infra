@@ -8,7 +8,6 @@ services:
     expose:
       - "8080"
     volumes:
-      - ./models:/app/models
       - ./firebase:/app/firebase
     networks:
       - aura-network
